@@ -1,5 +1,4 @@
-from random import randint, choice
-import numpy as np
+from random import choice
 
 combo_indices = [
     [0, 1, 2],
@@ -16,7 +15,6 @@ EMPTY_SIGN = '.'
 AI_SIGN = 'x'
 PLAYER_SIGN = 'O'
 BOARD = '.........'
-#print(combo_indices)
 
 def init_utility_matrix(board):
     return [0 if cell == EMPTY_SIGN else -1 for cell in board]
@@ -58,10 +56,9 @@ def best_positions_for_AI(board):
     positions = []
     utilities = utility_matrix(board)
     max_utility = max(utilities)
-    print (f'maximum utility: {max_utility}')
+    #print (f'maximum utility: {max_utility}')
 
     for (i, v) in enumerate(utilities):
-        #print (f'i: {i}')
         if utilities[i] == max_utility:
             positions.append(i)
     return positions
@@ -77,53 +74,30 @@ def print_utilities(utilities):
     print (f'{utilities[3]}, {utilities[4]}, {utilities[5]}')
     print (f'{utilities[6]}, {utilities[7]}, {utilities[8]}')
 
-#ReWrite
 def move(board, sign, pos):
-    #pos -= 1
     if board[pos] == EMPTY_SIGN: 
         return board[:pos] + sign + board[pos+1:]
     return None
 
-"""
-def ai_move(board):
-    while True:
-        pos = randint(1, 9)
-        if board[pos-1] == EMPTY_SIGN:
-            mv = move(board, AI_SIGN, pos)
-            if mv == None: continue
-            else: 
-                return mv
-"""
-
 def game_won_by(board):
     for i in combo_indices:
-        #print (f'index: {i}')
         if board[i[0]] == board[i[1]] == board[i[2]] != EMPTY_SIGN:
             return board[i[0]]
     return EMPTY_SIGN
             
 def ai_move(board):
     best_positions = best_positions_for_AI(board)
-    print (f'Best Positions: {best_positions}')
+    #print (f'Best Positions: {best_positions}')
     pos = choice(best_positions)
     return move(board, AI_SIGN, pos)
 
-    """
-    new_boards = all_moves_from_board(board, AI_SIGN)
-    for nb in new_boards:
-        if game_won_by(nb) == AI_SIGN:
-            return nb
-    return choice(new_boards)
-    """
-
+"""
 def all_moves_from_board(board, sign):
     move_list = []
     for i, v in enumerate(board):
         if v == EMPTY_SIGN:
             new_board = board[:i] + sign + board[i+1:]
-            #print(new_board)
             move_list.append(new_board)
-    #print(move_list)
     return move_list
 
 
@@ -137,6 +111,7 @@ def all_moves_from_board_list(board_list, sign):
 #print(all_moves_from_board(BOARD, AI_SIGN))
 #sBOARD = 'x.......x'
 #print(ai_move(sBOARD))
+"""
 
 
 def game_loop():
@@ -150,9 +125,6 @@ def game_loop():
             print ('-----------')
             print_board(new_board)
             print(' ')
-            #utilities = utility_matrix(new_board)
-            #print_utilities(utilities)
-            print(' ')
         else:
             board_nums = '123456789'
             stage_space = ''
@@ -161,8 +133,6 @@ def game_loop():
                     stage_space = f'{stage_space}{board_nums[i[0]]}'
                 else: 
                     stage_space = f'{stage_space}{i[1]}'
-                    #print(f'i={i[1]}')
-                #print(i)
             print_board(stage_space)
             pos = int(input(f'Your Turn({PLAYER_SIGN}): Enter Board Number to play: '))
             #TODO limit pos to between 1 & 9
@@ -180,7 +150,6 @@ def game_loop():
 
         game_ended = game_won_by(board)
         is_game_ended = game_ended != EMPTY_SIGN
-        #print (f'game_ended: {game_ended}; is_game_ended: {is_game_ended}')
         if game_ended == AI_SIGN: 
             print(' ')
             print ('GAME ENDED: Game Won by AI!')
@@ -195,10 +164,5 @@ def game_loop():
         print(' ')
         print ('GAME ENDED: No Winner!')
     #TODO Ask to restart GAME
-
-        
-
-
-#print_board(ai_move(BOARD))
 
 game_loop()
