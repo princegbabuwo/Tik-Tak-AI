@@ -115,6 +115,8 @@ def all_moves_from_board_list(board_list, sign):
 
 
 def game_loop():
+    #TODO Print Utility Values
+    #TODO Write you plays first at Random
     board = BOARD
     empty_cell_count = 9
     is_game_ended = False
