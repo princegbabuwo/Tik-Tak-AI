@@ -82,7 +82,7 @@ Before the A.I player makes it moves, we shall explore the possible winning stag
 
     This stage space is not intresting to A.I player as a winning path cannot be built from such a stage space hence no value is added.
 5. We would add a utility value of 1 to all the grids in a possible winning stage space if all the grids in the stage space are empty 
-7. When adding a utility value to an empty grid, the newly added utility value will be sumed with the previously added utility value of that grid
+7. When adding a utility value to an empty grid, the newly added utility value will be summed with the previously added utility value of that grid
 
 After all the utility values has been added to each grids in the game, the AI player will make its next move by playing in the grid with the highest utility value.
 
@@ -161,6 +161,14 @@ First before creating the Artificial Intelligent player let's consider a case of
 2. The unintelligent computer would be intelligent enough not to play in grids where either it or the human player has played before hand.
 -->
 
-According to www.half-real.net/tictactoe there are 255,168 possible unique games of tic tac to that can be played.
+According to www.half-real.net/tictactoe 
+
+There are 255,168 possible unique games of tic tac to that can be played of which:
+
+131,184 are won by the first player, 
+
+77,904 are won by the second player, 
+
+and 46,080 are drawn.
 
 However, after using the Heuristic guidance for the A.I player,
