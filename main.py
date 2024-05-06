@@ -102,6 +102,7 @@ def game_won_by(board):
         isdraw = isdraw or (board[i[1]] == AI_SIGN and board[i[2]] == PLAYER_SIGN)
         isdraw = isdraw or (board[i[0]] == PLAYER_SIGN and board[i[2]] == AI_SIGN)
         isdraw = isdraw or (board[i[1]] == PLAYER_SIGN and board[i[2]] == AI_SIGN)
+        #print(f'Case {i}; is_Draw: {isdraw}')
         if isdraw: 
             draw_count += 1
             #print(f'Draw Count: {draw_count}')
@@ -132,35 +133,56 @@ def all_moves_from_board_list(board_list, sign):
 
 #This function counts the game moves using Breath First Search 
 #and inaccordance with the rules programmed for the AI player.
-def countGameMoves(board, next_sign, moves_count):
+def countGameMoves(board, next_sign, counts):
     #TODO if board is a game won board such a board cannot be counted
     game_ended = game_won_by(board)
-    if game_ended == 0: 
-        return
-    elif game_ended == AI_SIGN: return
-    elif game_ended == PLAYER_SIGN: return
+    if game_ended == 0:
+        #input('Wait Here: ')
+        counts['draws'] += 1
+        print(f'Counts: {counts}') 
+        return 0, counts
+    elif game_ended == AI_SIGN: 
+        counts['ai'] += 1
+        print(f'Counts: {counts}')
+        return 1, counts
+    elif game_ended == PLAYER_SIGN:
+        counts['human'] += 1
+        print(f'Counts: {counts}')
+        return 2, counts
 
-    print(f'Board: {board}\nMoves: {moves_count}')
     if next_sign == PLAYER_SIGN:
         player_moves = possiblePlayerMoves(board)
+        print(f'\nPlayer Moves: {player_moves}')
         for pos in player_moves:
-            board = move(board, PLAYER_SIGN, pos)
-            moves_count += 1
+            input(f"\nNext Player Move {pos}: ")
+            new_board = move(board, PLAYER_SIGN, pos)
+            counts['moves'] += 1
+            print_board(new_board)
+            print(f"Moves: {counts['moves']}")
+            #input("Player Move has been played: ")
             next_sign = AI_SIGN
-            gameMoves = countGameMoves(board, next_sign, moves_count)
-            print(gameMoves)
-            #print(board)
-    if next_sign == AI_SIGN:
+            state, counts_ = countGameMoves(new_board, next_sign, counts)
+            print(f'state: {state}')
+            if state > -1: continue
+
+    elif next_sign == AI_SIGN:
         ai_moves = best_positions_for_AI(board)
-        print(f'AI Moves: {ai_moves}')
+        print(f'\nAI Moves: {ai_moves}')
         for pos in ai_moves:
-            board = move(board, AI_SIGN, pos)
+            input(f"\nNext AI Move {pos}: ")
+            new_board = move(board, AI_SIGN, pos)
             #print(f'Board @AI: {board}')
-            moves_count += 1
+            counts['moves'] += 1
+            #next_sign = PLAYER_SIGN
+            print_board(new_board)
+            print(f"Moves: {counts['moves']}")
+            #input("AI Move has been played: ")
             next_sign = PLAYER_SIGN
-            gameMoves = countGameMoves(board, next_sign, moves_count)
-            print(gameMoves)
-    return
+            state, counts_ = countGameMoves(new_board, next_sign, counts)
+            print(f'state: {state}') 
+            if state > -1: continue
+            
+    return -1, counts
     board_list = []
     board_list.append(board)
     move_count = 0
@@ -184,11 +206,6 @@ def countGameMoves(board, next_sign, moves_count):
         board_list.append(board)
 
         if move_count > 10: break
-
-board = 'X.OOX.X.O'
-#board = '.........'
-#game_won_by(board)
-countGameMoves(board, AI_SIGN, 0)
 
 
 def game_loop():
@@ -249,5 +266,23 @@ def game_loop():
         print(' ')
         print ('GAME ENDED: No Winner!')
     #TODO Ask to restart GAME
+
+
+board = 'X.O......'
+#board = '.........'
+#board = 'X.OOXXX.O'
+next_player = AI_SIGN
+print_board(board)
+counts = {
+    'moves': 0,
+    'ai': 0,
+    'human': 0,
+    'draws': 0,
+}
+#game_won_by(board)
+#print(f'Board: {board}\nMoves: {0}')
+#print(game_won_by(board))
+state, counts_ = countGameMoves(board, next_player, counts)
+print(counts_)
 
 #game_loop()
