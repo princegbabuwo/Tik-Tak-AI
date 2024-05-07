@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, randint
 
 combo_indices = [
     [0, 1, 2],
@@ -164,18 +164,24 @@ def countGameMoves(board, next_sign, counts):
     return -1, counts
 
 def game_loop():
-    #TODO Write you plays first at Random
+    #TODO Write who plays first at Random
     board = BOARD
     empty_cell_count = 9
     is_game_ended = False
-    while empty_cell_count > 0 and not is_game_ended:
-        if empty_cell_count % 2 == 1:
+    next_player = choice([AI_SIGN, PLAYER_SIGN])
+
+
+    while True: #empty_cell_count > 0 and not is_game_ended:
+        if next_player == AI_SIGN:
             new_board = ai_move(board)
-            print('AI MOVE')
+            next_player = PLAYER_SIGN
+            print('AI TURN')
             print ('-----------')
             print_board(new_board)
             print(' ')
-        else:
+        elif next_player == PLAYER_SIGN:
+            print('YOUR TURN')
+            print ('-----------')
             board_nums = '123456789'
             stage_space = ''
             for i in enumerate(board):
@@ -191,6 +197,7 @@ def game_loop():
                 print(' ')
                 print ('Invalid Move! PLAY AGAIN!')
                 continue
+            next_player = AI_SIGN
             print(' ')
             print('YOUR MOVE')
             print ('-----------')
@@ -199,8 +206,6 @@ def game_loop():
         board = new_board
 
         game_ended = game_won_by(board)
-        print(f'Game Ended: {game_ended}')
-        is_game_ended = game_ended != EMPTY_SIGN
         if game_ended == 0:
             print(' ')
             print ('GAME ENDED AS DRAW: No Winner!')
@@ -213,11 +218,6 @@ def game_loop():
             print(' ')
             print ('GAME ENDED: Game Won by YOU!')
             break
-
-        empty_cell_count -= 1
-    else: 
-        print(' ')
-        print ('GAME ENDED: No Winner!')
     #TODO Ask to restart GAME
 
 
@@ -252,5 +252,5 @@ def gameCounts():
     print(f'AI player first: {counts2}')
     print(f'Total counts: {counts_}')
 
-gameCounts()
-#game_loop()
+#gameCounts()
+game_loop()
