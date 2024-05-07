@@ -134,83 +134,36 @@ def all_moves_from_board_list(board_list, sign):
 #This function counts the game moves using Breath First Search 
 #and inaccordance with the rules programmed for the AI player.
 def countGameMoves(board, next_sign, counts):
-    #TODO if board is a game won board such a board cannot be counted
     game_ended = game_won_by(board)
     if game_ended == 0:
-        #input('Wait Here: ')
         counts['draws'] += 1
-        print(f'Counts: {counts}') 
         return 0, counts
     elif game_ended == AI_SIGN: 
         counts['ai'] += 1
-        print(f'Counts: {counts}')
         return 1, counts
     elif game_ended == PLAYER_SIGN:
         counts['human'] += 1
-        print(f'Counts: {counts}')
         return 2, counts
 
     if next_sign == PLAYER_SIGN:
         player_moves = possiblePlayerMoves(board)
-        print(f'\nPlayer Moves: {player_moves}')
         for pos in player_moves:
-            input(f"\nNext Player Move {pos}: ")
             new_board = move(board, PLAYER_SIGN, pos)
-            counts['moves'] += 1
-            print_board(new_board)
-            print(f"Moves: {counts['moves']}")
-            #input("Player Move has been played: ")
             next_sign = AI_SIGN
             state, counts_ = countGameMoves(new_board, next_sign, counts)
-            print(f'state: {state}')
             if state > -1: continue
 
     elif next_sign == AI_SIGN:
         ai_moves = best_positions_for_AI(board)
-        print(f'\nAI Moves: {ai_moves}')
         for pos in ai_moves:
-            input(f"\nNext AI Move {pos}: ")
             new_board = move(board, AI_SIGN, pos)
-            #print(f'Board @AI: {board}')
-            counts['moves'] += 1
-            #next_sign = PLAYER_SIGN
-            print_board(new_board)
-            print(f"Moves: {counts['moves']}")
-            #input("AI Move has been played: ")
             next_sign = PLAYER_SIGN
-            state, counts_ = countGameMoves(new_board, next_sign, counts)
-            print(f'state: {state}') 
+            state, counts_ = countGameMoves(new_board, next_sign, counts) 
             if state > -1: continue
             
     return -1, counts
-    board_list = []
-    board_list.append(board)
-    move_count = 0
-    #print(board_list[-1])
-    while True:
-        print(f'move count: {move_count}\nBoard List: {board_list[-1]}')
-        if next_sign == PLAYER_SIGN:
-            for (i, v) in enumerate(board_list[-1]):
-                #print(i, v)
-                if v == EMPTY_SIGN:
-                    #print('am here')
-                    board = move(board, PLAYER_SIGN, i)
-                    next_sign = AI_SIGN
-                    break
-        elif next_sign == AI_SIGN: 
-            board = ai_move(board)
-            next_sign = PLAYER_SIGN
-
-        move_count +=1
-        #Check if game has been won or drawn before appending move or game has ended
-        board_list.append(board)
-
-        if move_count > 10: break
-
 
 def game_loop():
-    #TODO Check if game has ended before the next move is played
-    #TODO Print Utility Values
     #TODO Write you plays first at Random
     board = BOARD
     empty_cell_count = 9
@@ -268,21 +221,36 @@ def game_loop():
     #TODO Ask to restart GAME
 
 
-board = 'X.O......'
-#board = '.........'
-#board = 'X.OOXXX.O'
-next_player = AI_SIGN
-print_board(board)
-counts = {
-    'moves': 0,
-    'ai': 0,
-    'human': 0,
-    'draws': 0,
-}
-#game_won_by(board)
-#print(f'Board: {board}\nMoves: {0}')
-#print(game_won_by(board))
-state, counts_ = countGameMoves(board, next_player, counts)
-print(counts_)
+def gameCounts():
+    board = '.........'
+    first_player = PLAYER_SIGN
+    counts = {
+        'ai': 0,
+        'human': 0,
+        'draws': 0,
+    }
+    state1, counts1 = countGameMoves(board, first_player, counts)
+    counts1['games'] = counts1['ai'] + counts1['human'] + counts1['draws']
 
+    board = '.........'
+    first_player = AI_SIGN
+    counts = {
+        'ai': 0,
+        'human': 0,
+        'draws': 0,
+    }
+    state2, counts2 = countGameMoves(board, first_player, counts)
+    counts2['games'] = counts2['ai'] + counts2['human'] + counts2['draws']
+
+    counts_ = {
+        'games': counts1['games'] + counts2['games'],
+        'ai': counts1['ai'] + counts2['ai'],
+        'human': counts1['human'] + counts2['human'],
+        'draws': counts1['draws'] + counts2['draws']
+    }
+    print(f'Human player first: {counts1}')
+    print(f'AI player first: {counts2}')
+    print(f'Total counts: {counts_}')
+
+gameCounts()
 #game_loop()

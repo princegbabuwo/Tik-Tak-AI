@@ -1,12 +1,5 @@
 # Tik-Tak-AI
 
-#TODO Definitions:
-#GRID
-#Stage State
-#Winning Stage State
-#Possible Winning Stage State
-#Winning Path/Building a winning path
-
 In this TikTak AI, We want to design an AI player that plays a Tic Tac Toe Game with a human player.
 
 First what is a Tic Tac Toe Game
@@ -32,10 +25,6 @@ Primarily, our AI player is interested in two events, which are:
 2. Making sure the opponent does not win the game
 
 The heuristic rules for the AI player will assign some utility values to each grid in the tic tac toe game based on the possibilities of the above mentioned events and the AI player will make its decision on its next move based on these assigned values.
-
-<!--Before assigning some values to the above mention events we explore the game states of the A.I either winning or losing the game.-->
-
-<!--First let's assign values to each of the grid in the game as described below.-->
 
 First let's represent each grid in the tic tac toe game with a respective number.
 
@@ -153,14 +142,6 @@ Therefore according to our heuristic rules, the AI player would always start fro
 
 The ulity values will keep being updated for the AI player as the human player makes it next moves until the game ends in a win, draw or lose for the AI player.
 
-
-<!--
-First before creating the Artificial Intelligent player let's consider a case of unintelligent computer that plays the game randomly against a human player with the considerations below:
-
-1. The unintelligent computer can only play the game randomly
-2. The unintelligent computer would be intelligent enough not to play in grids where either it or the human player has played before hand.
--->
-
 According to www.half-real.net/tictactoe 
 
 There are 255,168 possible unique games of tic tac to that can be played of which:
@@ -171,4 +152,33 @@ There are 255,168 possible unique games of tic tac to that can be played of whic
 
 and 46,080 are drawn.
 
-However, after using the Heuristic guidance for the A.I player,
+However, after using a Depth-First-Search algorithm on the Heuristic guidance for the A.I player, we were able to deduce the following:
+
+There is a total of 2,240 unique games that can be played between the Human and AI player
+
+of which only 120 games can be won by human 
+
+1776 can be won by the AI player
+
+and a the game can end in a draw only 344 times
+
+The more interesting part is that is that: When the AI player makes the first move, only 248 unique games can be played;
+
+of which 224 would be won be the AI player, 24 of the unique games would result into a draw and the human player does not get to win any of this games.
+
+From the above illustration, we have seen how the Heuristic guided AI player has become intelligent and has avoided alot of unintelligent moves thereby reducing the total games than can be played with the human player from 255,168 to a mere 2,240 games of which 1,776 (79%) of the unique games would be won by the AI player.
+
+In constrast, assuming the AI player plays randonmly, both the Human player and the AI player would have equal chances of winning the game but in reality, the human player would tend to win more as the human player would be much smarter than an AI player who plays at random
+
+The function `gameCounts()` for counting the game is in the main.py script: 
+
+To get started:
+
+clone the code at https://github.com/princegbabuwo/Tik-Tak-AI.git
+
+Open a terminal at the cloned folder and enther the following prompts
+
+    >cd tik-tak-ai
+    
+    >py main.py
+
